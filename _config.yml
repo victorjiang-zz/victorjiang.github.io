@@ -54,8 +54,8 @@ default_asides: [asides/recent_posts.html, asides/weibo.html, asides/github.html
 weibo_uid: 1794831102
 weibo_verifier: 5e3ee136
 weibo_fansline: 0 # 粉丝显示多少行
-weibo_show: true # 是否显示最近微博内容
-weibo_pic: true # 是否显示微博中的图片
+weibo_show: false # 是否显示最近微博内容
+weibo_pic: false # 是否显示微博中的图片
 weibo_skin: 1 # 使用哪种配色风格，数字为从1开始的微博秀风格序号
 
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
@@ -69,8 +69,8 @@ weibo_skin: 1 # 使用哪种配色风格，数字为从1开始的微博秀风格
 # ----------------------- #
 
 # Github repositories
-github_user: VictorJiang
-github_repo_count: 0
+github_user: 
+github_repo_count: 1
 github_show_profile_link: true
 github_skip_forks: true
 

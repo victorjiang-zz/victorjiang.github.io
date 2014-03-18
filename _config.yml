@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email: victorjiang@qq.com
+email: victorjiang0528@qq.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -69,7 +69,7 @@ weibo_skin: 1 # 使用哪种配色风格，数字为从1开始的微博秀风格
 # ----------------------- #
 
 # Github repositories
-github_user: 
+github_user:
 github_repo_count: 1
 github_show_profile_link: true
 github_skip_forks: true

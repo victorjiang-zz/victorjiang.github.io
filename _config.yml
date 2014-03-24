@@ -4,8 +4,11 @@
 
 url: http://VictorJiang.github.io
 title: Victor Jiang's Blog
-subtitle: Pursue excellence and success will follow.
+subtitle: One of Steve Jobs's fans
 author: Victor Jiang
+motto: Pursue excellence and success will follow.
+company: 苏州飞讯动力信息科技有限公司
+company_url: http://www.flycent.com.cn
 simple_search: https://www.google.com/search
 description:
 
@@ -69,13 +72,13 @@ weibo_skin: 1 # 使用哪种配色风格，数字为从1开始的微博秀风格
 # ----------------------- #
 
 # Github repositories
-github_user:
+github_user: VictorJiang
 github_repo_count: 1
 github_show_profile_link: true
 github_skip_forks: true
 
 # Twitter
-#twitter_user:
+twitter_user: victorjiang0528
 twitter_tweet_button: false
 
 # Google +1
@@ -103,7 +106,9 @@ disqus_show_comment_count: false
 google_analytics_tracking_id:
 
 # Facebook Like
+facebook_user: victorjiang0528
 facebook_like: false
 
 # weibo share
+weibo_user: jiangxiangui
 weibo_share: true

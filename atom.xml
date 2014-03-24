@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://VictorJiang.github.io/atom.xml" rel="self"/>
   <link href="http://VictorJiang.github.io/"/>
-  <updated>2014-03-24T23:44:01+08:00</updated>
+  <updated>2014-03-24T23:58:08+08:00</updated>
   <id>http://VictorJiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -12,14 +12,5 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[第一篇Blog]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/03/17/article/"/>
-    <updated>2014-03-17T22:08:49+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/03/17/article</id>
-    <content type="html"><![CDATA[<p>刚创建的blog,试用一下.还有很多东西需要学习.</p>
-]]></content>
-  </entry>
   
 </feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
   <link href="http://VictorJiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://VictorJiang.github.io/"/>
-  <updated>2014-04-02T00:59:48+08:00</updated>
+  <updated>2014-04-02T01:14:48+08:00</updated>
   <id>http://VictorJiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -31,7 +31,7 @@
 <!--添加图片1-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_0.png" alt="apns_prac_0" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_1.jpg" alt="apns_prac_1" /></p>
 
 <h3>2.创建App ID</h3>
 
@@ -40,14 +40,14 @@
 <!--添加图片2-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_1.png" alt="apns_prac_1" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_2.jpg" alt="apns_prac_2" /></p>
 
 <p>App Services勾选Push Notifications</p>
 
 <!--添加图片3-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_2.png" alt="apns_prac_2" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_3.jpg" alt="apns_prac_3" /></p>
 
 <h3>3.创建开发/发布证书</h3>
 
@@ -56,33 +56,33 @@
 <!--添加图片4-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_3.png" alt="apns_prac_3" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_4.jpg" alt="apns_prac_4" /></p>
 
 <p>  或者从App ID里创建</p>
 
 <!--添加图片5-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_4.png" alt="apns_prac_4" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_5.jpg" alt="apns_prac_5" /></p>
 
 <p>选择刚才创建的App ID</p>
 
 <!--添加图片6-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_5.png" alt="apns_prac_5" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_6.jpg" alt="apns_prac_6" /></p>
 
 <p>选择CSR文件生成证书（apns.cer），并下载本地。</p>
 
 <!--添加图片7-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_6.png" alt="apns_prac_6" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_7.jpg" alt="apns_prac_7" /></p>
 
 <!--添加图片8-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_7.png" alt="apns_prac_7" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_8.jpg" alt="apns_prac_8" /></p>
 
 <h3>4.创建Provisioning Profile文件</h3>
 
@@ -91,26 +91,26 @@
 <!--添加图片9-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_8.png" alt="apns_prac_8" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_9.png" alt="apns_prac_9" /></p>
 
 <p>选择App ID</p>
 
 <!--添加图片10-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_9.png" alt="apns_prac_9" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_10.png" alt="apns_prac_10" /></p>
 
 <p>选择证书、设备后生成文件（apns.mobileprovision），并下载。</p>
 
 <!--添加图片11-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_10.png" alt="apns_prac_10" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_11.jpg" alt="apns_prac_11" /></p>
 
 <!--添加图片12-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_11.png" alt="apns_prac_11" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_12.jpg" alt="apns_prac_12" /></p>
 
 <h3>5.导出密钥</h3>
 
@@ -119,7 +119,7 @@
 <!--添加图片13-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_12.png" alt="apns_prac_12" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_13.png" alt="apns_prac_13" /></p>
 
 <h3>6.证书处理</h3>
 

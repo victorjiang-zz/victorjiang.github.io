@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
   <link href="http://VictorJiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://VictorJiang.github.io/"/>
-  <updated>2014-04-02T01:14:48+08:00</updated>
+  <updated>2014-04-02T01:19:39+08:00</updated>
   <id>http://VictorJiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -98,7 +98,7 @@
 <!--添加图片10-->
 
 
-<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_10.png" alt="apns_prac_10" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_10.jpg" alt="apns_prac_10" /></p>
 
 <p>选择证书、设备后生成文件（apns.mobileprovision），并下载。</p>
 

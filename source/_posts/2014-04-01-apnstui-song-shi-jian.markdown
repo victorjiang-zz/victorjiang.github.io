@@ -52,7 +52,7 @@ App Services勾选Push Notifications
 
 选择App ID
 <!--添加图片10-->
-->![apns_prac_10](http://victorjiang.github.io/images/2014/apns_prac_10.png)<-
+->![apns_prac_10](http://victorjiang.github.io/images/2014/apns_prac_10.jpg)<-
 
 选择证书、设备后生成文件（apns.mobileprovision），并下载。
 <!--添加图片11-->

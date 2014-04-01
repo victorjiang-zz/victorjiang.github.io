@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Victor Jiang's Blog]]></title>
-  <link href="http://VictorJiang.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: 译文 | Victor Jiang's Blog]]></title>
+  <link href="http://VictorJiang.github.io/blog/categories/yi-wen/atom.xml" rel="self"/>
   <link href="http://VictorJiang.github.io/"/>
   <updated>2014-04-02T00:38:42+08:00</updated>
   <id>http://VictorJiang.github.io/</id>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[APNs推送实践]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
-    <updated>2014-04-01T23:01:49+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[[译]苹果推送通知服务]]></title>
@@ -253,7 +244,7 @@
 </code></pre>
 
 
-<p>当device收到通知，使用&#8221;GAME_PLAY_REQUEST_FORMAT&#8221;作为key在Localizable.strings文件中寻找对应的值。<br/>
+<p>当device收到通知，使用"GAME_PLAY_REQUEST_FORMAT"作为key在Localizable.strings文件中寻找对应的值。<br/>
 假设文件中存在该key的值：
 &ldquo;GAME_PLAY_REQUEST_FORMAT&rdquo;= &ldquo;<code>%@ and %@ have invited you to play Monopoly</code>&rdquo;;<br/>
 设备显示“<code>Jennaand Frank have invited you to play Monopoly</code>”提示信息。</p>
@@ -322,15 +313,6 @@
 }
 </code></pre>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[写在开头]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/xie-zai-kai-tou/"/>
-    <updated>2014-04-01T22:59:54+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/xie-zai-kai-tou</id>
-    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   

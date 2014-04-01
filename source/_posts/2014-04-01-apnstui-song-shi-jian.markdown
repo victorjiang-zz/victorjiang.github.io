@@ -15,55 +15,55 @@ categories: 技术
 ###1.CSR文件
 通过Keychain Access申请一个CSR文件（CertificateSigningRequest.certSigningRequest），保存到磁盘。
 <!--添加图片1-->
-->![apns_prac_0](http://victorjiang.github.io/images/2014/apns_prac_0.png)<-
+->![apns_prac_1](http://victorjiang.github.io/images/2014/apns_prac_1.jpg)<-
 
 ###2.创建App ID
 Bundle ID不能使用通配的，通配的Bundle ID不能用来推送。
 <!--添加图片2-->
-->![apns_prac_1](http://victorjiang.github.io/images/2014/apns_prac_1.png)<-
+->![apns_prac_2](http://victorjiang.github.io/images/2014/apns_prac_2.jpg)<-
 
 App Services勾选Push Notifications
 <!--添加图片3-->
-->![apns_prac_2](http://victorjiang.github.io/images/2014/apns_prac_2.png)<-
+->![apns_prac_3](http://victorjiang.github.io/images/2014/apns_prac_3.jpg)<-
 
 ###3.创建开发/发布证书
 根据情况选择创建开发还是发布证书
 <!--添加图片4-->
-->![apns_prac_3](http://victorjiang.github.io/images/2014/apns_prac_3.png)<-
+->![apns_prac_4](http://victorjiang.github.io/images/2014/apns_prac_4.jpg)<-
   
   或者从App ID里创建
 <!--添加图片5-->
-->![apns_prac_4](http://victorjiang.github.io/images/2014/apns_prac_4.png)<-
+->![apns_prac_5](http://victorjiang.github.io/images/2014/apns_prac_5.jpg)<-
 
 选择刚才创建的App ID
 <!--添加图片6-->
-->![apns_prac_5](http://victorjiang.github.io/images/2014/apns_prac_5.png)<-
+->![apns_prac_6](http://victorjiang.github.io/images/2014/apns_prac_6.jpg)<-
 
 选择CSR文件生成证书（apns.cer），并下载本地。
 <!--添加图片7-->
-->![apns_prac_6](http://victorjiang.github.io/images/2014/apns_prac_6.png)<-
+->![apns_prac_7](http://victorjiang.github.io/images/2014/apns_prac_7.jpg)<-
 <!--添加图片8-->
-->![apns_prac_7](http://victorjiang.github.io/images/2014/apns_prac_7.png)<-
+->![apns_prac_8](http://victorjiang.github.io/images/2014/apns_prac_8.jpg)<-
 
 ###4.创建Provisioning Profile文件
 选择profile文件类型
 <!--添加图片9-->
-->![apns_prac_8](http://victorjiang.github.io/images/2014/apns_prac_8.png)<-
+->![apns_prac_9](http://victorjiang.github.io/images/2014/apns_prac_9.png)<-
 
 选择App ID
 <!--添加图片10-->
-->![apns_prac_9](http://victorjiang.github.io/images/2014/apns_prac_9.png)<-
+->![apns_prac_10](http://victorjiang.github.io/images/2014/apns_prac_10.png)<-
 
 选择证书、设备后生成文件（apns.mobileprovision），并下载。
 <!--添加图片11-->
-->![apns_prac_10](http://victorjiang.github.io/images/2014/apns_prac_10.png)<-
+->![apns_prac_11](http://victorjiang.github.io/images/2014/apns_prac_11.jpg)<-
 <!--添加图片12-->
-->![apns_prac_11](http://victorjiang.github.io/images/2014/apns_prac_11.png)<-
+->![apns_prac_12](http://victorjiang.github.io/images/2014/apns_prac_12.jpg)<-
 
 ###5.导出密钥
 在Keychain Access中导出之前创建的证书的密钥（apns.p12），这里需要对密钥文件进行加密。
 <!--添加图片13-->
-->![apns_prac_12](http://victorjiang.github.io/images/2014/apns_prac_12.png)<-
+->![apns_prac_13](http://victorjiang.github.io/images/2014/apns_prac_13.png)<-
 
 ###6.证书处理
 现在我们有下面几个文件：

@@ -1,0 +1,205 @@
+---
+layout: post
+title: "[译]苹果推送通知服务"
+date: 2014-04-01 23:00:43 +0800
+comments: true
+categories: 译文
+---
+
+本文翻译自官网<a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html" target="_blank">Apple Push Notification Service</a>,由于本人英语水平有限，翻译的不是很准确，读者请见谅，欢迎指出不足之处。
+
+推送通知的核心功能是苹果推送通知服务（简称APNs），它是iOS和OS X设备传输信息的一个可靠的、高效的服务。每台设备将一个可信任和加密的IP与该服务建立连接，通过这个连接接收通知。当应用程序没有运行，这时候接收到一条通知，设备会弹出提示信息。
+
+软件服务器（provider）发起通知，通过一个安全可靠的通道与APNs建立连接，传入将用于客户端应用程序的数据。软件服务器将目标设备发送给APNs，目标设备上的应用程序就会接收到来自APNs的一条新数据。
+
+##1.工作机制
+APNs远程传输从服务器到设备的数据，一条通知由设备令牌（deviceToken）和有效负载（payload）两个主要部分组成。设备令牌类似一串手机号码，它包含安装了App并启用APNs的设备信息，通过该令牌可以定位到该设备。APNs使用设备令牌来授权远程通知。有效负载是一个JSON格式的字符串，指定了目标设备如何进行提示。
+
+软件服务器将设备令牌和有效负载打包发送给APNs，APNs再将有效负载推送给目标设备。
+
+当provider向APNs授权时，会将应用程序的Bundle Identifier发送给APNs。
+
+->![apns_trans_1](http://victorjiang.github.io/images/2014/apns_trans_1.png)<-
+<center>图1-1. 从一个服务器到一个应用程序的推送通知</center>
+
+图1-1是一个非常简单的provider和device直接推送的工作机制，在provider和device方面同时存在多点连接。图1-2描述了一个更真实的推送工作机制
+
+->![apns_trans_2](http://victorjiang.github.io/images/2014/apns_trans_2.png)<-
+<center>图1-2. 多个服务器和多台设备之间的推送通知</center>
+
+##2.服务质量
+APNs包含一个默认的质量服务（QoS）组件，执行存储转发功能。
+
+如果APNs尝试发送一个通知，但是设备处于离线状态，该通知会被存储一段时间，当设备处于在线状态的时候再发送该通知。
+
+一个特定的App只会存储最近的一条通知，如果设备在离线的情况下provider发送多条通知，前面的通知会被丢弃，只保留最后一条。
+
+如果设备长时间处于离线状态，被存储的所有通知都会被丢弃。
+
+##3.安全架构
+为了能在provider和device之间通信，APNs揭露了某些入口点。但是为了确保安全，必须调整这些入口点。为此，APNs需要对provide和device两端分别进行验证。
+
+**`连接验证（Connection trust）`**包含两方面，一方面是APNs验证与一个授权发送通知的provider连接；另一方面是APNs验证与一个合法的设备的连接。
+
+在APNs与入口点建立信任之后，必须确保通知传送到一个合法的终点。为此，必须确认消息传送的路线，只有预期的设备才能接受它。
+
+在APNs中，为确保精准的消息传送，需要通过设备令牌进行**`令牌验证（token trust）`**，设备令牌是设备第一次与APNs连接时，APNs对设备的不透明的标识符。设备与它的provider共享该deviceToken，此后，该令牌包含在provider发送的每一条通知中。
+
+一个特定通知的合法路线是建立信任的基础。
+
+<font color='red'>注</font>：设备令牌和设备UDID不是同一回事。
+
+下面讨论连接验证、令牌验证的必要组件，以及建立信任的四个过程。
+
+###APNs与device之间的连接验证
+APNs通过TLS与一台连接的设备建立身份验证（注意，这个阶段的系统负责连接验证，你自己不需要做任何事情）。在这个过程，设备启动一个与APNs的TLS连接，APNs返回他的服务器证书，设备验证该证书，然后发送设备证书给APNs，APNs验证该设备证书。如图3-1：
+
+->![apns_trans_3](http://victorjiang.github.io/images/2014/apns_trans_3.png)<-
+<center>图3-1. APNs与device之间的验证过程</center>
+
+###APNs与provider之间的连接验证
+同APNs与device之间的连接验证一样。
+
+->![apns_trans_4](http://victorjiang.github.io/images/2014/apns_trans_4.png)<-
+<center>图3-2. APNs与provider之间的验证过程</center>
+<br />
+<font color='red'>注</font>：provider连接只对一个特定的App有效，证书中指定了该App的Bundle ID。APNs同时维护一个撤销证书的列表，如果provider的证书在列表中，APNs可以撤销provider验证（即拒绝连接）。
+
+###令牌生成和传播
+应用程序要能接收推送通知必须先注册，通常在应用程序安装后。系统收到一条注册请求，然后与APNs连接，传递该请求。APNs使用设备证书生成一个deviceToken，该deviceToken包含设备的标识符，返回设备加密后的deviceToken。如图3-3：
+
+->![apns_trans_5](http://victorjiang.github.io/images/2014/apns_trans_5.png)<-
+<center>图3-3. 令牌生成和传播过程</center>
+
+应用程序中收到的deviceToken是一个NSData的对象，App然后将deviceToken以二进制或十六进制的形式传递给provider。图3-4中展示了令牌生成和传播的顺序。
+
+->![apns_trans_6](http://victorjiang.github.io/images/2014/apns_trans_6.png)<-
+<center>图3-4. 令牌生成和传播顺序</center>
+
+###令牌验证（通知）
+在系统从APNs获取到deviceToken之后，每一次与APNs的连接必须提供该deviceToken，APNs解密deviceToken并验证令牌是不是连接的设备生成的，然后验证令牌里的设备标识符是否和设备证书里的设备标识符匹配。
+
+provider发送给APNs的每一条通知必须包含deviceToken，APNs通过密钥解密该deviceToken，从而确保通知有效，然后使用deviceToken中的deviceID确定通知的目标设备。
+
+->![apns_trans_7](http://victorjiang.github.io/images/2014/apns_trans_7.png)<-
+<center>图3-5. 令牌验证过程</center>
+
+###验证组件
+为了支持APNs的安全模式，provider和device必须拥有确信的证书，授权证书、或者令牌。
+
+**Provider**：每一个provider需要有一个独特的证书和私钥验证与APNs的连接，这个证书由Apple公司提供。对于每一条通知，provider必须提供目标设备的deviceToken给APNs，provider可以选择性的是否验证APNs。
+
+**Device**：系统使用包含密钥和证书的公共服务器证书与APNs建立TLS连接，获得设备激活过程中的设备证书和密钥，将其存储在钥匙串中。该系统还拥有其特定的deviceToken，并负责将此deviceToken传递给provider。
+
+##4.通知的有效负载
+每一条推送通知都包含一个有效负载（payload），该payload包含如何让系统弹出提示的信息，以及一些provider自定义的数据。一条通知的payload的最大尺寸为<font color='blue'>*256*</font>个字节，APNs拒绝任何超出该限制的通知。
+
+对于每一条通知，都是一个JSON类型的字典对象。这个字典必须通过“<font color='blue'>aps</font>”key包含另外一个字典。这个aps字典包含下面一个或多个属性：
+
+* 向用户显示的提示信息
+* App 图标上显示的数字
+* 弹出通知的声音
+
+当通知到来的时候App没有运行，弹出提示信息，播放声音，App图标显示badge的值；如果App处于运行中，系统将通知作为一个NSDictionary对象传递给application的delegate。
+
+Provider可以在保留字“aps”外自定义有效负载值，自定义的值必须使用JSON结构和基本类型：<font color='blue'>dictionary，array，string，number，Boolean</font>。你不应该包括客户信息（或任何敏感数据）作为自定义的有效负载数据。相反，将其用于多种用途，如设置上下文（用户界面）或内部度量。
+
+<center>表4-1. aps字典的keys和values</center>
+
+Key | Value type | Comment
+----|------------|--------
+alert|string or dictionary|如果包含该属性，系统展示标准的提示，你可以指定一个字符串或者一个字典作为提示的信息，如果值是一个字符串，它将成为提示的文本信息，提示包括两个按钮：关闭和查看。点击查看，启动应用程序。如果值是一个字典，看表4-2对该字典的描述。
+badge|number|应用程序图标上显示的数字。如果该属性的值没有设置，那不改变图标上的数字。设置该属性的值为0可以移除。
+sound|string|应用程序包里的声音文件名。如果设置的声音文件不存在，或者指定了default，则播放默认的声音。
+content-available|number|该值为1表明新内容有效。该属性用在支持杂志和后台下载的App中。杂志App是保证在每24小时内能收到至少一条推送通知。
+
+<center>表4-2. alert字典的keys和values</center>
+
+Key | Value type | Comment
+----|------------|--------
+body|string | 	提示的文本信息
+action-loc-key | string or null | 如果指定一个字符串，系统显示带有两个按钮的提示框，其行为如表4-1。该字符串作为一个key去获取本地字符串，然后取代“查看”作为右边按钮的标题。
+loc-key | string | Localizable.strings文件中的一个key，该字符串可以用%@和%n$@ ，loc-args中指定的变量格式化。
+loc-args | array of strings | 出现在loc-key的格式说明符。
+launch-image | string | 程序包里的一张图片的文件名，可以包括文件扩展名或者不包括。该图片作为用户点击按钮或滑动滑块的启动图片。如果没有指定该属性，系统Info.plist文件中通过UILaunchImageFile key指定的图片，或者使用Default.png。
+
+<font color='red'>注</font>：如果你想设备显示带关闭和查看按钮的提示框，指定alert的类型为string，不要指定alert的类型为字段，尽管字典中只有一个body属性。
+
+##5.格式化本地字符串
+你可以用两种方式显示本地提示信息，服务器发起的通知定位文本，为此，必须知道当前设备的语言环境；或者客户端应用程序在其包里支持的本地化文件中转换提示信息。provider在通知的有效负载aps字典中指定loc-key和loc-args属性的值，当device接收到通知（假设App不在运行中），使用aps字典属性根据当前语言环境查找本地化文件并格式化字符串，然后显示给用户。
+
+第二种选项工作的更多细节。
+
+应用程序可以按照其支持的每种语言国际化资源文件，比如图片、音频、文本，国际化的资源文件放在包里的一个子目录下，目录名称由两部分组成：语言代码和“<font color='blue'>.lproj</font>”扩展名（例如fr.plroj）。本地化字符串被放在`Localizable.strings`文件中，文件中的每一个实体都有一个key和string类型的值，该string可以使用格式说明符替换变量值。
+
+<font color='red'>注</font>：当action-loc-key属性是一个字符串的时候同样适用，在Localizable.strings文件中设置这个key的值，就能修改提示框右边按钮的标题。
+
+举例说明，provider指定了alert属性的值：
+
+<pre><code>
+"alert" : {
+    "loc-key" : "GAME_PLAY_REQUEST_FORMAT",
+	"loc-args" : [ "Jenna", "Frank"]
+}
+</code></pre>
+
+当device收到通知，使用"GAME_PLAY_REQUEST_FORMAT"作为key在Localizable.strings文件中寻找对应的值。  
+假设文件中存在该key的值：
+"GAME_PLAY_REQUEST_FORMAT"= "`%@ and %@ have invited you to play Monopoly`";  
+设备显示“`Jennaand Frank have invited you to play Monopoly`”提示信息。
+
+<font color='red'>注</font>：只有你完全需要的时候才应该使用字典类型的alert的loc-key和loc-args属性，许多App不需要这两个属性。
+
+##6.JSON格式的有效负载例子
+<font color='red'>注</font>：为了可读性，下面的例子用空格和断行加以修饰。实际当中省略这些来减少有效负载的大小，提升网络性能。
+
+**例1**：下面是一个简单的有效负载，aps字典中只带有一个提示信息，当然默认的还有两个按钮（关闭和查看）。该有效负载还带有一个自定义的数组。
+<pre><code>
+{
+    "aps" : { "alert" : "Message received from Bob" },
+    "acme2" : [ "bang",  "whiz" ]
+}
+</code></pre>
+
+**例2**：下面的例子自定义了alertView右边按钮的title，此时，“PLAY”是本地文件 Localizable.strings中的key，同时设置appicon的badge数量为5.
+<pre><code>
+{
+    "aps" : {
+        "alert" : {
+            "body" : "Bob wants to play poker",
+            "action-loc-key" : "PLAY"
+        },
+        "badge" : 5,
+    },
+    "acme1" : "bar",
+    "acme2" : [ "bang",  "whiz" ]
+}
+</code></pre>
+
+**例3**：下面的例子弹出一个带有关闭和查看的提示框，以及设置app icon的badge数量为9，并且当接收到通知的时候播放声音。
+<pre><code>
+{
+    "aps" : {
+        "alert" : "You got your emails.",
+        "badge" : 9,
+        "sound" : "bingbong.aiff"
+    },
+    "acme1" : "bar",
+    "acme2" : 42
+}
+</code></pre>
+
+**例4**：下面的例子使用loc-key和loc-args 。
+<pre><code>
+
+{
+    "aps" : {
+        "alert" : {
+            "loc-key" : "GAME_PLAY_REQUEST_FORMAT",
+            "loc-args" : [ "Jenna", "Frank"]
+        },
+        "sound" : "chime"
+    },
+    "acme" : "foo"
+}
+</code></pre>

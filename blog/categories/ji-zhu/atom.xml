@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
-  <link href="http://VictorJiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
-  <link href="http://VictorJiang.github.io/"/>
-  <updated>2014-04-02T01:19:39+08:00</updated>
-  <id>http://VictorJiang.github.io/</id>
+  <link href="http://victorjiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
+  <link href="http://victorjiang.github.io/"/>
+  <updated>2014-05-22T13:47:16+08:00</updated>
+  <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
     <email><![CDATA[victorjiang0528@qq.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[APNs推送实践]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
+    <link href="http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
     <updated>2014-04-01T23:01:49+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
+    <id>http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
     <content type="html"><![CDATA[<p>关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇<a href="http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/">《苹果推送通知服务》</a>，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。</p>
 
 <p>下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作：</p>
@@ -135,12 +135,20 @@
 
 <p>处理证书是为了让我们的服务端能够可以给APNs发送通知，对于不同的服务端，证书的处理也不同。</p>
 
-<ol>
-<li>openssl x509 -in apns.cer -inform der -out PushChatCert.pem</li>
-<li>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12</li>
-<li>cat PushChatCert.pem PushChatKey.pem > ck.pem</li>
-</ol>
+<p>1.把.cer的SSL证书转换为.pem文件</p>
 
+<pre><code>openssl x509 -in apns.cer -inform der -out PushChatCert.pem
+</code></pre>
+
+<p>2.把私钥.p12文件转化为.pem文件</p>
+
+<pre><code>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12
+</code></pre>
+
+<p>3.把证书和私钥整合到一个文件里</p>
+
+<pre><code>cat PushChatCert.pem PushChatKey.pem &gt; ck.pem
+</code></pre>
 
 <p>如果服务端是.net，第三步需要用下面的命令生成证书</p>
 
@@ -153,46 +161,41 @@
 
 <h3>1.注册推送</h3>
 
-<pre><code>
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+<p>```
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
 
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+<pre><code>[[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
 
-    return YES;
-}
+return YES;
 </code></pre>
 
+<p>}
+```</p>
 
-<ul>
-<li>注册成功</li>
-</ul>
+<p>注册成功</p>
 
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData </em>)deviceToken
+{</p>
 
-<pre><code>
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    //注册成功，去除deviceToken中的空格和<>
-    
-    NSLog(@"register success:%@", deviceToken);
-    NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-}
+<pre><code>//注册成功，去除deviceToken中的空格和&lt;&gt;
+
+NSLog(@"register success:%@", deviceToken);
+NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
 </code></pre>
 
+<p>}
+```</p>
 
-<ul>
-<li>注册失败</li>
-</ul>
+<p>注册失败</p>
 
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didFailToRegisterForRemoteNotificationsWithError:(NSError </em>)error
+{</p>
 
-<pre><code>
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    
-}
-</code></pre>
-
+<p>}
+```</p>
 
 <h3>2.接收通知</h3>
 
@@ -202,29 +205,32 @@
 
 <p>此时didFinishLaunchingWithOptions方法将被调用</p>
 
-<pre><code>
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
-    
-    //通过userInfo判断程序是通过点击推送通知启动还是正常启动
-}
+<p>```
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+
+//通过userInfo判断程序是通过点击推送通知启动还是正常启动
 </code></pre>
 
+<p>}
+```</p>
 
 <h4>2.2 App后台运行</h4>
 
 <p>当用户点击推送消息的时候才会调用下面的方法</p>
 
-<pre><code>
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    // 处理推送消息
-    NSLog(@"userinfo:%@",userInfo);
-    
-}
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didReceiveRemoteNotification:(NSDictionary </em>)userInfo
+{</p>
+
+<pre><code>// 处理推送消息
+NSLog(@"userinfo:%@",userInfo);
 </code></pre>
 
+<p>}
+```</p>
 
 <h4>2.3 App前台运行</h4>
 
@@ -232,10 +238,9 @@
 
 <h4>iOS 7新增方法</h4>
 
-<pre><code>
+<p><code>
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
-</code></pre>
-
+</code></p>
 
 <h2>参考文章</h2>
 

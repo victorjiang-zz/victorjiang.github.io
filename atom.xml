@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Victor Jiang's Blog]]></title>
-  <link href="http://VictorJiang.github.io/atom.xml" rel="self"/>
-  <link href="http://VictorJiang.github.io/"/>
-  <updated>2014-04-02T01:19:39+08:00</updated>
-  <id>http://VictorJiang.github.io/</id>
+  <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
+  <link href="http://victorjiang.github.io/"/>
+  <updated>2014-05-22T13:47:16+08:00</updated>
+  <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
     <email><![CDATA[victorjiang0528@qq.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[APNs推送实践]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
+    <link href="http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
     <updated>2014-04-01T23:01:49+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
+    <id>http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
     <content type="html"><![CDATA[<p>关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇<a href="http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/">《苹果推送通知服务》</a>，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。</p>
 
 <p>下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作：</p>
@@ -135,12 +135,20 @@
 
 <p>处理证书是为了让我们的服务端能够可以给APNs发送通知，对于不同的服务端，证书的处理也不同。</p>
 
-<ol>
-<li>openssl x509 -in apns.cer -inform der -out PushChatCert.pem</li>
-<li>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12</li>
-<li>cat PushChatCert.pem PushChatKey.pem > ck.pem</li>
-</ol>
+<p>1.把.cer的SSL证书转换为.pem文件</p>
 
+<pre><code>openssl x509 -in apns.cer -inform der -out PushChatCert.pem
+</code></pre>
+
+<p>2.把私钥.p12文件转化为.pem文件</p>
+
+<pre><code>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12
+</code></pre>
+
+<p>3.把证书和私钥整合到一个文件里</p>
+
+<pre><code>cat PushChatCert.pem PushChatKey.pem &gt; ck.pem
+</code></pre>
 
 <p>如果服务端是.net，第三步需要用下面的命令生成证书</p>
 
@@ -153,45 +161,52 @@
 
 <h3>1.注册推送</h3>
 
-<pre><code>
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-
-    return YES;
-}
-</code></pre>
-
-
-<ul>
-<li>注册成功</li>
-</ul>
-
-
-<pre><code>
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    //注册成功，去除deviceToken中的空格和<>
-    
-    NSLog(@"register success:%@", deviceToken);
-    NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-}
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+</span><span class='line'>{
+</span><span class='line'>
+</span><span class='line'>    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+</span><span class='line'>
+</span><span class='line'>    return YES;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>注册失败</li>
-</ul>
+<p>注册成功</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+</span><span class='line'>{
+</span><span class='line'>  //注册成功，去除deviceToken中的空格和&lt;&gt;
+</span><span class='line'>    
+</span><span class='line'>    NSLog(@"register success:%@", deviceToken);
+</span><span class='line'>    NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<pre><code>
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    
-}
-</code></pre>
+<p>注册失败</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+</span><span class='line'>{
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>2.接收通知</h3>
@@ -202,28 +217,36 @@
 
 <p>此时didFinishLaunchingWithOptions方法将被调用</p>
 
-<pre><code>
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
-    
-    //通过userInfo判断程序是通过点击推送通知启动还是正常启动
-}
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+</span><span class='line'>{
+</span><span class='line'>  NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+</span><span class='line'>  
+</span><span class='line'>  //通过userInfo判断程序是通过点击推送通知启动还是正常启动
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>2.2 App后台运行</h4>
 
 <p>当用户点击推送消息的时候才会调用下面的方法</p>
 
-<pre><code>
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    // 处理推送消息
-    NSLog(@"userinfo:%@",userInfo);
-    
-}
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+</span><span class='line'>{
+</span><span class='line'>    // 处理推送消息
+</span><span class='line'>    NSLog(@"userinfo:%@",userInfo);
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>2.3 App前台运行</h4>
@@ -232,9 +255,8 @@
 
 <h4>iOS 7新增方法</h4>
 
-<pre><code>
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>参考文章</h2>
@@ -250,9 +272,9 @@
   
   <entry>
     <title type="html"><![CDATA[[译]苹果推送通知服务]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/"/>
+    <link href="http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/"/>
     <updated>2014-04-01T23:00:43+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu</id>
+    <id>http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu</id>
     <content type="html"><![CDATA[<p>本文翻译自官网<a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html" target="_blank">Apple Push Notification Service</a>,由于本人英语水平有限，翻译的不是很准确，读者请见谅，欢迎指出不足之处。</p>
 
 <p>推送通知的核心功能是苹果推送通知服务（简称APNs），它是iOS和OS X设备传输信息的一个可靠的、高效的服务。每台设备将一个可信任和加密的IP与该服务建立连接，通过这个连接接收通知。当应用程序没有运行，这时候接收到一条通知，设备会弹出提示信息。</p>
@@ -553,9 +575,9 @@
   
   <entry>
     <title type="html"><![CDATA[写在开头]]></title>
-    <link href="http://VictorJiang.github.io/blog/2014/04/01/xie-zai-kai-tou/"/>
+    <link href="http://victorjiang.github.io/blog/2014/04/01/xie-zai-kai-tou/"/>
     <updated>2014-04-01T22:59:54+08:00</updated>
-    <id>http://VictorJiang.github.io/blog/2014/04/01/xie-zai-kai-tou</id>
+    <id>http://victorjiang.github.io/blog/2014/04/01/xie-zai-kai-tou</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>

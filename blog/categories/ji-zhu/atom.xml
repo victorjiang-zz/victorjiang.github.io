@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
+  <link href="http://victorjiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
+  <link href="http://victorjiang.github.io/"/>
+  <updated>2014-05-22T13:47:16+08:00</updated>
+  <id>http://victorjiang.github.io/</id>
+  <author>
+    <name><![CDATA[Victor Jiang]]></name>
+    <email><![CDATA[victorjiang0528@qq.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[APNs推送实践]]></title>
+    <link href="http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian/"/>
+    <updated>2014-04-01T23:01:49+08:00</updated>
+    <id>http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
+    <content type="html"><![CDATA[<p>关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇<a href="http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/">《苹果推送通知服务》</a>，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。</p>
+
+<p>下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作：</p>
+
+<h2>一、申请证书</h2>
+
+<h3>1.CSR文件</h3>
+
+<p>通过Keychain Access申请一个CSR文件（CertificateSigningRequest.certSigningRequest），保存到磁盘。</p>
+
+<!--添加图片1-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_1.jpg" alt="apns_prac_1" /></p>
+
+<h3>2.创建App ID</h3>
+
+<p>Bundle ID不能使用通配的，通配的Bundle ID不能用来推送。</p>
+
+<!--添加图片2-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_2.jpg" alt="apns_prac_2" /></p>
+
+<p>App Services勾选Push Notifications</p>
+
+<!--添加图片3-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_3.jpg" alt="apns_prac_3" /></p>
+
+<h3>3.创建开发/发布证书</h3>
+
+<p>根据情况选择创建开发还是发布证书</p>
+
+<!--添加图片4-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_4.jpg" alt="apns_prac_4" /></p>
+
+<p>  或者从App ID里创建</p>
+
+<!--添加图片5-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_5.jpg" alt="apns_prac_5" /></p>
+
+<p>选择刚才创建的App ID</p>
+
+<!--添加图片6-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_6.jpg" alt="apns_prac_6" /></p>
+
+<p>选择CSR文件生成证书（apns.cer），并下载本地。</p>
+
+<!--添加图片7-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_7.jpg" alt="apns_prac_7" /></p>
+
+<!--添加图片8-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_8.jpg" alt="apns_prac_8" /></p>
+
+<h3>4.创建Provisioning Profile文件</h3>
+
+<p>选择profile文件类型</p>
+
+<!--添加图片9-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_9.png" alt="apns_prac_9" /></p>
+
+<p>选择App ID</p>
+
+<!--添加图片10-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_10.jpg" alt="apns_prac_10" /></p>
+
+<p>选择证书、设备后生成文件（apns.mobileprovision），并下载。</p>
+
+<!--添加图片11-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_11.jpg" alt="apns_prac_11" /></p>
+
+<!--添加图片12-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_12.jpg" alt="apns_prac_12" /></p>
+
+<h3>5.导出密钥</h3>
+
+<p>在Keychain Access中导出之前创建的证书的密钥（apns.p12），这里需要对密钥文件进行加密。</p>
+
+<!--添加图片13-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/apns_prac_13.png" alt="apns_prac_13" /></p>
+
+<h3>6.证书处理</h3>
+
+<p>现在我们有下面几个文件：</p>
+
+<ol>
+<li>CertificateSigningRequest.certSigningRequest</li>
+<li>apns.cer</li>
+<li>apns.mobileprovision</li>
+<li>apns.p12</li>
+</ol>
+
+
+<p>处理证书是为了让我们的服务端能够可以给APNs发送通知，对于不同的服务端，证书的处理也不同。</p>
+
+<p>1.把.cer的SSL证书转换为.pem文件</p>
+
+<pre><code>openssl x509 -in apns.cer -inform der -out PushChatCert.pem
+</code></pre>
+
+<p>2.把私钥.p12文件转化为.pem文件</p>
+
+<pre><code>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12
+</code></pre>
+
+<p>3.把证书和私钥整合到一个文件里</p>
+
+<pre><code>cat PushChatCert.pem PushChatKey.pem &gt; ck.pem
+</code></pre>
+
+<p>如果服务端是.net，第三步需要用下面的命令生成证书</p>
+
+<pre><code>openssl pkcs12 -export -in PushChatCert.pem -inkey PushChatKey.pem -certfile CertificateSigningRequest.certSigningRequest -name "apns_web" -out apns_web.p12
+</code></pre>
+
+<h2>二、代码操作</h2>
+
+<p><font color='red'>注</font>：项目的Bundle Identify需要与创建的App ID保持一致</p>
+
+<h3>1.注册推送</h3>
+
+<p>```
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>[[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+
+return YES;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>注册成功</p>
+
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData </em>)deviceToken
+{</p>
+
+<pre><code>//注册成功，去除deviceToken中的空格和&lt;&gt;
+
+NSLog(@"register success:%@", deviceToken);
+NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+</code></pre>
+
+<p>}
+```</p>
+
+<p>注册失败</p>
+
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didFailToRegisterForRemoteNotificationsWithError:(NSError </em>)error
+{</p>
+
+<p>}
+```</p>
+
+<h3>2.接收通知</h3>
+
+<p>接收通知根据App的状态分为三种情况：</p>
+
+<h4>2.1 App未运行</h4>
+
+<p>此时didFinishLaunchingWithOptions方法将被调用</p>
+
+<p>```
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+
+//通过userInfo判断程序是通过点击推送通知启动还是正常启动
+</code></pre>
+
+<p>}
+```</p>
+
+<h4>2.2 App后台运行</h4>
+
+<p>当用户点击推送消息的时候才会调用下面的方法</p>
+
+<p>```
+&ndash; (void)application:(UIApplication <em>)application didReceiveRemoteNotification:(NSDictionary </em>)userInfo
+{</p>
+
+<pre><code>// 处理推送消息
+NSLog(@"userinfo:%@",userInfo);
+</code></pre>
+
+<p>}
+```</p>
+
+<h4>2.3 App前台运行</h4>
+
+<p>当App正在运行的时候会自动调用上面的didReceiveRemoteNotification方法，此时App的applicationState值为UIApplicationStateActive。</p>
+
+<h4>iOS 7新增方法</h4>
+
+<p><code>
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
+</code></p>
+
+<h2>参考文章</h2>
+
+<ol>
+<li><a href="http://blog.csdn.net/showhilllee/article/details/8631734">一步一步教你做ios推送</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_4adf31ea010175wo.html">net发送apns解决方案（iphone push）</a></li>
+<li><a href="http://docs.jpush.cn/pages/viewpage.action?pageId=4259879">获取 APNs 推送内容</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

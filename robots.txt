@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://victorjiang.github.io/sitemap.xml 

@@ -9,7 +9,7 @@
 	<meta name="author" content="Victor Jiang">
 
 	
-	<meta name="description" content="Apr 1st, 2014 技术 APNs推送实践 关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇《苹果推送通知服务》，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。 下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作： 一、 &hellip;">
+	<meta name="description" content="Jun 17th, 2014 技术 在iOS中使用Icon Font 最近公司在做一个OA项目,项目中有一个天气模块,这边天气的数据接口是由国家气象局提供,接口同时提供了天气图标,不过需要通过图标的网络地址去加载,而且大小风格固定,不一定适合App的样式.是就将用该图标还是让美工设计一套? &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
 			<a class="twitter" href="http://twitter.com/victorjiang0528" target="_blank" title="Twitter">Twitter</a>
 		
 		
-			<a class="github" href="https://github.com/victorjiang" target="_blank" title="GitHub">GitHub</a>
+			<a class="github" href="https://github.com/VictorJiang" target="_blank" title="GitHub">GitHub</a>
 		
 		
 		
@@ -113,6 +113,404 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-17T10:16:03+08:00" data-updated="true" itemprop="datePublished">Jun 17<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ji-zhu/'>技术</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/06/17/zai-ios-zhong-shi-yong-icon-font/" itemprop="url">在iOS中使用Icon Font</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<!-- photo 1 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_1.jpg" alt="photo 1" /></p>
+
+<p>最近公司在做一个OA项目,项目中有一个天气模块,这边天气的数据接口是由<a href="http://cj.weather.com.cn/">国家气象局</a>提供,接口同时提供了天气图标,不过需要通过图标的网络地址去加载,而且大小风格固定,不一定适合App的样式.是就将用该图标还是让美工设计一套?</p>
+
+<p>于是乎打算去网上找找有没有类似的天气类的应用,在GitHub上找到一个<a href="https://github.com/CZWeatherKit/CZWeatherKit">CZWeatherKit</a>的开源应用,运行了下,这界面,这图标正是我想要的iOS7风格,但在工程里并没有找到任何天气的图标,遂研究一下他的代码.</p>
+
+<p>最终在绘制界面的代码中找到了答案:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.weatherView.conditionIconLabel.text = [NSString stringWithFormat:@"%c", condition.climaconCharacter];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是,可是,怎么会用一个<code>UILabel</code>去展示一个图标,是不是错了?怎么是<code>conditionIconLabel</code>,于是从label.text的赋值查找,<code>condition.climaconCharacter</code>的类型是<code>Climacon</code>,看定义是一个枚举类型,每一个元素都是一个字符.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef enum {
+</span><span class='line'>    ClimaconCloud                   = '!',
+</span><span class='line'>    ClimaconCloudSun                = '"',
+</span><span class='line'>    ClimaconCloudMoon               = '#',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconRain                    = '$',
+</span><span class='line'>    ClimaconRainSun                 = '%',
+</span><span class='line'>    ClimaconRainMoon                = '&',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconRainAlt                 = '\'',
+</span><span class='line'>    ClimaconRainSunAlt              = '(',
+</span><span class='line'>    ClimaconRainMoonAlt             = ')',
+</span><span class='line'>
+</span><span class='line'>    ClimaconDownpour                = '*',
+</span><span class='line'>    ClimaconDownpourSun             = '+',
+</span><span class='line'>    ClimaconDownpourMoon            = ',',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconDrizzle                 = '-',
+</span><span class='line'>    ClimaconDrizzleSun              = '.',
+</span><span class='line'>    ClimaconDrizzleMoon             = '/',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconSleet                   = '0',
+</span><span class='line'>    ClimaconSleetSun                = '1',
+</span><span class='line'>    ClimaconSleetMoon               = '2',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconHail                    = '3',
+</span><span class='line'>    ClimaconHailSun                 = '4',
+</span><span class='line'>    ClimaconHailMoon                = '5',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconFlurries                = '6',
+</span><span class='line'>    ClimaconFlurriesSun             = '7',
+</span><span class='line'>    ClimaconFlurriesMoon            = '8',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconSnow                    = '9',
+</span><span class='line'>    ClimaconSnowSun                 = ':',
+</span><span class='line'>    ClimaconSnowMoon                = ';',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconFog                     = '&lt;',
+</span><span class='line'>    ClimaconFogSun                  = '=',
+</span><span class='line'>    ClimaconFogMoon                 = '&gt;',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconHaze                    = '?',
+</span><span class='line'>    ClimaconHazeSun                 = '@',
+</span><span class='line'>    ClimaconHazeMoon                = 'A',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconWind                    = 'B',
+</span><span class='line'>    ClimaconWindCloud               = 'C',
+</span><span class='line'>    ClimaconWindCloudSun            = 'D',
+</span><span class='line'>    ClimaconWindCloudMoon           = 'E',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconLightning               = 'F',
+</span><span class='line'>    ClimaconLightningSun            = 'G',
+</span><span class='line'>    ClimaconLightningMoon           = 'H',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconSun                     = 'I',
+</span><span class='line'>    ClimaconSunset                  = 'J',
+</span><span class='line'>    ClimaconSunrise                 = 'K',
+</span><span class='line'>    ClimaconSunLow                  = 'L',
+</span><span class='line'>    ClimaconSunLower                = 'M',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconMoon                    = 'N',
+</span><span class='line'>    ClimaconMoonNew                 = 'O',
+</span><span class='line'>    ClimaconMoonWaxingCrescent      = 'P',
+</span><span class='line'>    ClimaconMoonWaxingQuarter       = 'Q',
+</span><span class='line'>    ClimaconMoonWaxingGibbous       = 'R',
+</span><span class='line'>    ClimaconMoonFull                = 'S',
+</span><span class='line'>    ClimaconMoonWaningGibbous       = 'T',
+</span><span class='line'>    ClimaconMoonWaningQuarter       = 'U',
+</span><span class='line'>    ClimaconMoonWaningCrescent      = 'V',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconSnowflake               = 'W',
+</span><span class='line'>    ClimaconTornado                 = 'X',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconThermometer             = 'Y',
+</span><span class='line'>    ClimaconThermometerLow          = 'Z',
+</span><span class='line'>    ClimaconThermometerMediumLoew   = '[',
+</span><span class='line'>    ClimaconThermometerMediumHigh   = '\\',
+</span><span class='line'>    ClimaconThermometerHigh         = ']',
+</span><span class='line'>    ClimaconThermometerFull         = '^',
+</span><span class='line'>    ClimaconCelsius                 = '_',
+</span><span class='line'>    ClimaconFahrenheit              = '\'',
+</span><span class='line'>    ClimaconCompass                 = 'a',
+</span><span class='line'>    ClimaconCompassNorth            = 'b',
+</span><span class='line'>    ClimaconCompassEast             = 'c',
+</span><span class='line'>    ClimaconCompassSouth            = 'd',
+</span><span class='line'>    ClimaconCompassWest             = 'e',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconUmbrella                = 'f',
+</span><span class='line'>    ClimaconSunglasses              = 'g',
+</span><span class='line'>    
+</span><span class='line'>    ClimaconCloudRefresh            = 'h',
+</span><span class='line'>    ClimaconCloudUp                 = 'i',
+</span><span class='line'>    ClimaconCloudDown               = 'j'
+</span><span class='line'>} Climacon;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>又产生一个疑问,既然是字符,<code>UILabel</code>不是应该显示该字符吗?<code>conditionIconLabel</code>在初始化的时候设置了字体为:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// UIFont name of the Climacon font
+</span><span class='line'>#define CLIMACON_FONT @"Climacons-Font"
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>[self.conditionIconLabel setFont:[UIFont fontWithName:CLIMACON_FONT size:fontSize]];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原来是用的自定义的Icon字体,字体文件<code>Climacons.ttf</code>.下面进入正题.</p>
+
+<h2>一、如何使用自定义字体</h2>
+
+<p>在讲Icon Font之前,先来看看普通自定义字体是如何使用的.</p>
+
+<h3>1.导入字体文件</h3>
+
+<!-- photo 2 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_2.png" alt="photo 2" /></p>
+
+<h3>2.配置.plist文件</h3>
+
+<p>在.plist文件中注册自定义字体</p>
+
+<!-- photo 3 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_3.png" alt="photo 3" /></p>
+
+<h3>3.找到自定义字体名称</h3>
+
+<p>注册完之后,需要检测自定义字体是否注册成功,并获取新字体名称,检测方法就是遍历所有安装字体,查看是否包含新注册字体:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>for (NSString *familyName in [UIFont familyNames]) {
+</span><span class='line'>        NSLog(@"familyName = %@", familyName);
+</span><span class='line'>        
+</span><span class='line'>        for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
+</span><span class='line'>            NSLog(@"    fontName = %@", fontName);
+</span><span class='line'>        }
+</span><span class='line'>    }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看控制台打印出来的所有字体是否有新注册的字体,如果有,则注册成功,并记住字体名(<code>Kaushan Script</code>),后面会用到.</p>
+
+<!-- photo 4 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_4.png" alt="photo 4" /></p>
+
+<h3>4.使用自定义字体</h3>
+
+<p>只要设置<code>UILabel</code>的<code>font</code>为自定义字体即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.label.font = [UIFont fontWithName:@"Kaushan Script" size:35];
+</span><span class='line'>    self.label.text = @"Hello World";
+</span><span class='line'>    self.label.textColor = [UIColor blueColor];</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- photo 5 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_5.png" alt="photo 5" /></p>
+
+<h2>二、如何使用Icon Font</h2>
+
+<p>这里我使用上面天气的图标字体文件<code>Climacons.ttf</code></p>
+
+<h3>1.导入图标字体文件</h3>
+
+<h3>2.配置.plist文件</h3>
+
+<p>前两部和普通字体一样将字体注册到项目中</p>
+
+<h3>3.找到图标对应的Unicode编码</h3>
+
+<!-- photo 6 -->
+
+
+<p><img src="http://victorjiang.github.io/images/2014/icon_font_6.png" alt="photo 6" /></p>
+
+<p>从图中可以看出类似<code>E800</code>就是各Icon的Unicode码</p>
+
+<h3>4.使用Icon Font</h3>
+
+<p>使用图标字体只需要两步:</p>
+
+<ol>
+<li>设置控件的font属性为Icon Font</li>
+<li>赋值Unicode码</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.label.font = [UIFont fontWithName:@"fontello" size:40];
+</span><span class='line'>self.label.text = @"\ue800";</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样UILabel上就显示了上面的Google图标.</p>
+
+<p>这里注意如何使用Unicode码,</p>
+
+<ol>
+<li>使用<code>\u</code>前缀,后面跟四位Unicode码</li>
+<li>使用<code>\U</code>前缀,后面跟八位Unicode码</li>
+</ol>
+
+
+<p>比如上面的赋值还可以这样:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.label.text = @"\U0000e800";</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Icon Font的使用虽然很简单,只有两步,但是可读性却很低,不对照上面的图,根本不知道<code>E800</code>对应的是哪张图.可以用一些常量来命名,使阅读者可以清楚其意义</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>static NSString * const CustomIconFont_Google = @"\ue800";
+</span><span class='line'>static NSString * const CustomIconFont_GitHub = @"\ue801";
+</span><span class='line'>static NSString * const CustomIconFont_CSS3 = @"\ue802";
+</span><span class='line'>static NSString * const CustomIconFont_Apple = @"\ue803";
+</span><span class='line'>static NSString * const CustomIconFont_HTML5 = @"\ue804";</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>注:可以从上面的`CZWeatherKit`看出,他定义了一个enum的`Climacon`,这边不是通过Unicode码来使用Icon Font的,他是通过Name来使用的.
+</code></pre>
+
+<p>这里引出一个问题,笔者到现在还没有解决,网上关于Icon Font的资料都是通过Unicode来使用,但是在<code>CZWeatherKit</code>的项目中,是通过Name来使用,打开两者的字体文件,都可以查看到Unicode和Name对应的值,笔者尝试更换Icon Font的使用方式,在<code>CZWeatherKit</code>中通过Unicode对应的值给UILabel赋值,在上面的学习项目中修改通过Name对应的值来给UILabel赋值,结果都不成功.</p>
+
+<p>以及如何通过Index Mode来访问Icon Font,就这一问题,笔者在<a href="http://www.zhihu.com/question/24095915">知乎</a>上也提问了,希望有知道的同学不吝赐教.</p>
+
+<p>参考文章:<a href="http://ued.taobao.org/blog/2013/09/icon-font-in-ios/">在iOS中使用icon font</a></p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -258,20 +656,12 @@
 
 <p>处理证书是为了让我们的服务端能够可以给APNs发送通知，对于不同的服务端，证书的处理也不同。</p>
 
-<p>1.把.cer的SSL证书转换为.pem文件</p>
+<ol>
+<li>openssl x509 -in apns.cer -inform der -out PushChatCert.pem</li>
+<li>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12</li>
+<li>cat PushChatCert.pem PushChatKey.pem > ck.pem</li>
+</ol>
 
-<pre><code>openssl x509 -in apns.cer -inform der -out PushChatCert.pem
-</code></pre>
-
-<p>2.把私钥.p12文件转化为.pem文件</p>
-
-<pre><code>openssl pkcs12 -nocerts -out PushChatKey.pem -in apns.p12
-</code></pre>
-
-<p>3.把证书和私钥整合到一个文件里</p>
-
-<pre><code>cat PushChatCert.pem PushChatKey.pem &gt; ck.pem
-</code></pre>
 
 <p>如果服务端是.net，第三步需要用下面的命令生成证书</p>
 
@@ -284,52 +674,45 @@
 
 <h3>1.注册推送</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-</span><span class='line'>{
-</span><span class='line'>
-</span><span class='line'>    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-</span><span class='line'>
-</span><span class='line'>    return YES;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<pre><code>
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+
+    return YES;
+}
+</code></pre>
 
 
-<p>注册成功</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-</span><span class='line'>{
-</span><span class='line'>  //注册成功，去除deviceToken中的空格和&lt;&gt;
-</span><span class='line'>    
-</span><span class='line'>    NSLog(@"register success:%@", deviceToken);
-</span><span class='line'>    NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-</span><span class='line'>    
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<ul>
+<li>注册成功</li>
+</ul>
 
 
-<p>注册失败</p>
+<pre><code>
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    //注册成功，去除deviceToken中的空格和<>
+    
+    NSLog(@"register success:%@", deviceToken);
+    NSString *token = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+}
+</code></pre>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-</span><span class='line'>{
-</span><span class='line'>    
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+<ul>
+<li>注册失败</li>
+</ul>
+
+
+<pre><code>
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    
+}
+</code></pre>
 
 
 <h3>2.接收通知</h3>
@@ -340,36 +723,28 @@
 
 <p>此时didFinishLaunchingWithOptions方法将被调用</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-</span><span class='line'>{
-</span><span class='line'>  NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
-</span><span class='line'>  
-</span><span class='line'>  //通过userInfo判断程序是通过点击推送通知启动还是正常启动
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<pre><code>
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    NSDictionary *userInfo = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    //通过userInfo判断程序是通过点击推送通知启动还是正常启动
+}
+</code></pre>
 
 
 <h4>2.2 App后台运行</h4>
 
 <p>当用户点击推送消息的时候才会调用下面的方法</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-</span><span class='line'>{
-</span><span class='line'>    // 处理推送消息
-</span><span class='line'>    NSLog(@"userinfo:%@",userInfo);
-</span><span class='line'>    
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<pre><code>
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    // 处理推送消息
+    NSLog(@"userinfo:%@",userInfo);
+    
+}
+</code></pre>
 
 
 <h4>2.3 App前台运行</h4>
@@ -378,8 +753,9 @@
 
 <h4>iOS 7新增方法</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;</span></code></pre></td></tr></table></div></figure>
+<pre><code>
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
+</code></pre>
 
 
 <h2>参考文章</h2>

@@ -6,9 +6,9 @@ comments: true
 categories: 译文
 ---
 
-<!--more-->
-
 本文翻译自官网<a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html" target="_blank">Apple Push Notification Service</a>,由于本人英语水平有限，翻译的不是很准确，读者请见谅，欢迎指出不足之处。
+
+<!--more-->
 
 推送通知的核心功能是苹果推送通知服务（简称APNs），它是iOS和OS X设备传输信息的一个可靠的、高效的服务。每台设备将一个可信任和加密的IP与该服务建立连接，通过这个连接接收通知。当应用程序没有运行，这时候接收到一条通知，设备会弹出提示信息。
 

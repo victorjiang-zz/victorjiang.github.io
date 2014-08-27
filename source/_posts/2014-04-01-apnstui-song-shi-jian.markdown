@@ -6,9 +6,10 @@ comments: true
 categories: 技术
 ---
 
-<!--more-->
 
 关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇[《苹果推送通知服务》](http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/)，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。
+
+<!--more-->
 
 下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作：
 

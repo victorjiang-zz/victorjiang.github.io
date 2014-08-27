@@ -6,13 +6,13 @@ comments: true
 categories: 技术
 ---
 
-<!--more-->
-
 
 <!-- photo 1 -->
 ![photo 1](http://victorjiang.github.io/images/2014/icon_font_1.jpg)
 
 最近公司在做一个OA项目,项目中有一个天气模块,这边天气的数据接口是由[国家气象局](http://cj.weather.com.cn/)提供,接口同时提供了天气图标,不过需要通过图标的网络地址去加载,而且大小风格固定,不一定适合App的样式.是就将用该图标还是让美工设计一套?
+
+<!--more-->
 
 于是乎打算去网上找找有没有类似的天气类的应用,在GitHub上找到一个[CZWeatherKit](https://github.com/CZWeatherKit/CZWeatherKit)的开源应用,运行了下,这界面,这图标正是我想要的iOS7风格,但在工程里并没有找到任何天气的图标,遂研究一下他的代码.
 

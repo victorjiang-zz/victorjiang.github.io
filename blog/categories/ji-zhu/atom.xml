@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2014-06-17T14:42:02+08:00</updated>
+  <updated>2014-08-27T17:17:36+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -24,6 +24,9 @@
 <p><img src="http://victorjiang.github.io/images/2014/icon_font_1.jpg" alt="photo 1" /></p>
 
 <p>最近公司在做一个OA项目,项目中有一个天气模块,这边天气的数据接口是由<a href="http://cj.weather.com.cn/">国家气象局</a>提供,接口同时提供了天气图标,不过需要通过图标的网络地址去加载,而且大小风格固定,不一定适合App的样式.是就将用该图标还是让美工设计一套?</p>
+
+<!--more-->
+
 
 <p>于是乎打算去网上找找有没有类似的天气类的应用,在GitHub上找到一个<a href="https://github.com/CZWeatherKit/CZWeatherKit">CZWeatherKit</a>的开源应用,运行了下,这界面,这图标正是我想要的iOS7风格,但在工程里并没有找到任何天气的图标,遂研究一下他的代码.</p>
 
@@ -287,6 +290,9 @@ static NSString * const CustomIconFont_HTML5 = @"\ue804";
     <updated>2014-04-01T23:01:49+08:00</updated>
     <id>http://victorjiang.github.io/blog/2014/04/01/apnstui-song-shi-jian</id>
     <content type="html"><![CDATA[<p>关于APNs苹果官方有详细介绍，之前我也整理了一份翻译篇<a href="http://victorjiang.github.io/blog/2014/04/01/yi-ping-guo-tui-song-tong-zhi-fu-wu/">《苹果推送通知服务》</a>，由于水平有限，翻译可能存在错误，不过可以起到参考作用，还请指出错误之处，以便及时纠正。</p>
+
+<!--more-->
+
 
 <p>下面就APNs的一些实践操作进行介绍，包括前期的证书申请以及代码操作：</p>
 

@@ -25,12 +25,12 @@ extern void CTCellularDataPlanSetIsEnabled(BOOL enabled);   // 设置
 第一次使用Widget，TodayViewController的视图是居中显示的
 
 <!-- 图1 -->
-->![cellular_extension_1](../images/2014/cellular_extension_1.jpg)<-
+->![cellular_extension_1](http://victorjiang.github.io/images/2014/cellular_extension_1.jpg)<-
 
 之后下拉的时候，Widget的内容会向上偏移
 
 <!-- 图2 -->
-->![cellular_extension_2](../images/2014/cellular_extension_2.jpg)<-
+->![cellular_extension_2](http://victorjiang.github.io/images/2014/cellular_extension_2.jpg)<-
 
 原因是TodayViewController的`- widgetMarginInsetsForProposedMarginInsets:defaultMarginInsets`方法
 
@@ -52,7 +52,7 @@ extern void CTCellularDataPlanSetIsEnabled(BOOL enabled);   // 设置
 ```
 
 <!-- 图3 -->
-->![cellular_extension_3](../images/2014/cellular_extension_3.jpg)<-
+->![cellular_extension_3](http://victorjiang.github.io/images/2014/cellular_extension_3.jpg)<-
 
 
 

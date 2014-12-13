@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2014-08-27T17:17:36+08:00</updated>
+  <updated>2014-12-13T15:20:54+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[切换移动网络开关的扩展]]></title>
+    <link href="http://victorjiang.github.io/blog/2014/12/13/qie-huan-yi-dong-wang-luo-kai-guan-de-kuo-zhan/"/>
+    <updated>2014-12-13T15:12:31+08:00</updated>
+    <id>http://victorjiang.github.io/blog/2014/12/13/qie-huan-yi-dong-wang-luo-kai-guan-de-kuo-zhan</id>
+    <content type="html"><![CDATA[<p>当初看到<a href="http://weibo.com/6david9?from=myfollow_group">6david9</a>的一篇博客<a href="http://blog.cocoabit.com/blog/2014/09/29/shi-yongcoretelephony-zhong-de-si-you-jie-kou-she-zhi-yi-dong-wang-luo-kai-guan/">使用 CORETELEPHONY 中的私有接口设置移动网络开关</a>，然后想到给它加一个Today类型的Extension，直接下拉就可以快速设置，配上系统自带的上拉设置WiFi，堪称完美。</p>
+
+<!--more-->
+
+
+<p>项目地址：<a href="https://github.com/victorjiang/MobileDataSwitch">https://github.com/victorjiang/MobileDataSwitch</a></p>
+
+<p>设置网络开关的私有接口：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>extern BOOL CTCellularDataPlanGetIsEnabled();   // 查询
+</span><span class='line'>extern void CTCellularDataPlanSetIsEnabled(BOOL enabled);   // 设置</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要添加 CoreTelephony.framework 框架</p>
+
+<p>第一次使用Widget，TodayViewController的视图是居中显示的</p>
+
+<!-- 图1 -->
+
+
+<p style="text-align:center;"><img src="../images/2014/cellular_extension_1.jpg" alt="cellular_extension_1" /></p>
+
+<p>之后下拉的时候，Widget的内容会向上偏移</p>
+
+<!-- 图2 -->
+
+
+<p style="text-align:center;"><img src="../images/2014/cellular_extension_2.jpg" alt="cellular_extension_2" /></p>
+
+<p>原因是TodayViewController的<code>- widgetMarginInsetsForProposedMarginInsets:defaultMarginInsets</code>方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+</span><span class='line'>{
+</span><span class='line'>    //defaultMarginInsets = (top = 0, left = 47, bottom = 39, right = 0)
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认下边距有39个单位，解决办法为修改下边距为0，这样视图就居中了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+</span><span class='line'>{
+</span><span class='line'>    defaultMarginInsets.bottom = 0;
+</span><span class='line'>    return defaultMarginInsets;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- 图3 -->
+
+
+<p style="text-align:center;"><img src="../images/2014/cellular_extension_3.jpg" alt="cellular_extension_3" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在iOS中使用Icon Font]]></title>

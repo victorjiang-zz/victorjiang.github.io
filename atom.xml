@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2014-12-13T15:20:54+08:00</updated>
+  <updated>2014-12-13T15:26:46+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -40,14 +40,14 @@
 <!-- 图1 -->
 
 
-<p style="text-align:center;"><img src="../images/2014/cellular_extension_1.jpg" alt="cellular_extension_1" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/cellular_extension_1.jpg" alt="cellular_extension_1" /></p>
 
 <p>之后下拉的时候，Widget的内容会向上偏移</p>
 
 <!-- 图2 -->
 
 
-<p style="text-align:center;"><img src="../images/2014/cellular_extension_2.jpg" alt="cellular_extension_2" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/cellular_extension_2.jpg" alt="cellular_extension_2" /></p>
 
 <p>原因是TodayViewController的<code>- widgetMarginInsetsForProposedMarginInsets:defaultMarginInsets</code>方法</p>
 
@@ -80,7 +80,7 @@
 <!-- 图3 -->
 
 
-<p style="text-align:center;"><img src="../images/2014/cellular_extension_3.jpg" alt="cellular_extension_3" /></p>
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2014/cellular_extension_3.jpg" alt="cellular_extension_3" /></p>
 ]]></content>
   </entry>
   

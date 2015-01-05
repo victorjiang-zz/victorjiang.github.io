@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2014-12-13T15:26:46+08:00</updated>
+  <updated>2015-01-05T23:11:19+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Block的五种使用场景]]></title>
+    <link href="http://victorjiang.github.io/blog/2015/01/05/blockde-wu-chong-shi-yong-chang-jing/"/>
+    <updated>2015-01-05T23:08:02+08:00</updated>
+    <id>http://victorjiang.github.io/blog/2015/01/05/blockde-wu-chong-shi-yong-chang-jing</id>
+    <content type="html"><![CDATA[<p>关于Block（闭包）的介绍就不具体的介绍了，可以自行搜索，Block其实就是一个函数块，这里主要讲Block的使用。主要有以下五种情况：</p>
+
+<!--more-->
+
+
+<h3>1. 作为本地变量</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>returnType (^blockName)(parameterTypes) = ^returnType(parameters) {...};</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. 作为类的属性</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@property (nonatomic, copy) returnType (^blockName)(parameterTypes);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. 作为方法的参数</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)someMethodThatTakesABlock:(returnType (^)(parameterTypes))blockName;</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. 调用带Block的方法</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[someObject someMethodThatTakesABlock:^returnType (parameters) {...}];</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>5. typedef一个Block</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef returnType (^TypeName)(parameterTypes);
+</span><span class='line'>TypeName blockName = ^returnType(parameters) {...};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里，1、4、5中后面的表达式<code>^returnType(parameters) {...}</code>可以省略<code>returnType</code>，写成这样:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>returnType (^blockName)(parameterTypes) = ^(parameters) {...};
+</span><span class='line'>[someObject someMethodThatTakesABlock:^(parameters) {...}];
+</span><span class='line'>TypeName blockName = ^(parameters) {...};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>国外有一个网站就用一个域名光介绍Block的这五种使用场景，真够浪费这域名的。<a href="http://fuckingblocksyntax.com/">fuckingblocksyntax</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[切换移动网络开关的扩展]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2015-01-05T23:11:19+08:00</updated>
+  <updated>2015-02-28T16:33:24+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2015年规划及目标]]></title>
+    <link href="http://victorjiang.github.io/blog/2015/02/28/2015nian-gui-hua-ji-mu-biao/"/>
+    <updated>2015-02-28T16:27:18+08:00</updated>
+    <id>http://victorjiang.github.io/blog/2015/02/28/2015nian-gui-hua-ji-mu-biao</id>
+    <content type="html"><![CDATA[<p>转眼间，2015年已快进入第三个月份了，春节也过去几天了，显然我还没有从春节的气氛中缓过来，沉浸在没有上午的日子里。</p>
+
+<p>Anyway，还是要赶紧收收心，回到工作的正规上来，于是乎给自己在新的一年里制定了几个目标，希望自己能够尽量都一一实现：</p>
+
+<!--more-->
+
+
+<h2>1. 坚持写技术博客</h2>
+
+<p>目标是每个月至少写一篇技术博客，其实说来惭愧，本来有一篇关于多媒体播放的文章打算一月份的时候写的，也做了一些笔记，后来打算二月份的时候写吧，二月份过了个年，什么都忘了。不过后面还是希望自己能坚持这个目标，接下来先把多媒体播放的这篇文章补上。</p>
+
+<h2>2. 使用Swift开发项目</h2>
+
+<p>去年6月份，苹果推出了新的iOS开发语言——Swift，到现在已经学习了Swift的大部分知识，也早已摩拳擦掌，准备拿出来练练手了。虽然Swift语言还不够成熟，但有幸能见证一门语言的成长，感觉还是不错的。</p>
+
+<h2>3. 学习一门其他开发语言</h2>
+
+<p>暂定的目标是——JavaScript，为什么选择JS，原因是自己对Web App开发还没有涉及过，Web App开发虽然不能完全替代Native App，但这门技术还是需要掌握的，Web App开发能带来许多的好处，现在也已经有很多的App有该功能了。当然，Web App开发不仅仅要学习JavaScript，同样还需要知道HTML、CSS，这两个由于之前有学习一点，了解过，所以在学习Web App开发的同时需要巩固这两个的知识。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Block的五种使用场景]]></title>
@@ -1064,8 +1090,18 @@
     <link href="http://victorjiang.github.io/blog/2014/04/01/xie-zai-kai-tou/"/>
     <updated>2014-04-01T22:59:54+08:00</updated>
     <id>http://victorjiang.github.io/blog/2014/04/01/xie-zai-kai-tou</id>
-    <content type="html"><![CDATA[<!--more-->
+    <content type="html"><![CDATA[<p>现在时间是：2015年02月28日15:29:01，这篇文章本应该是在去年的4月1日写的，然后拖了一年，内容一直空白。</p>
 
+<p>刚学习iOS的时候，经常在网上看大神的博客，正好Github提供这个搭建个人博客的功能，于是想给自己也建一个博客，一开始也不知道写点什么，知道自己写的文章应该也没多少人看，再加上本人文笔不行，写不出什么高质量的文章来。但是后来看到网上一篇关于鼓励程序员坚持写博客的文章，最终决定写博客了。</p>
+
+<!--more-->
+
+
+<p>写博客的作用我想都不言而喻了，一方面是很好的总结自己学到的知识；另一方面也是督促自己学习更多的知识。</p>
+
+<p>总结2014年整个一年，其实自己收获的并不多，工作上做了几个项目，并没有很好的提高自己；学习上，今年关于iOS开发新出来了Swift语言，也没有第一时间学习运用起来；生活上，渐渐的要一个人做所有事了。</p>
+
+<p>希望自己在以后的日子里能够不断学习上进，完善充实自己，让自己能拿点本事出来。</p>
 ]]></content>
   </entry>
   

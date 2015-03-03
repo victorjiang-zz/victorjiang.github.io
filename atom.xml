@@ -4,7 +4,7 @@
   <title><![CDATA[Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2015-02-28T16:33:24+08:00</updated>
+  <updated>2015-03-04T00:06:30+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -12,6 +12,332 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何根据设备选择不同尺寸的图片]]></title>
+    <link href="http://victorjiang.github.io/blog/2015/03/04/ru-he-gen-ju-she-bei-xuan-ze-bu-tong-chi-cun-de-tu-pian/"/>
+    <updated>2015-03-04T00:03:20+08:00</updated>
+    <id>http://victorjiang.github.io/blog/2015/03/04/ru-he-gen-ju-she-bei-xuan-ze-bu-tong-chi-cun-de-tu-pian</id>
+    <content type="html"><![CDATA[<p>在项目中，可以通过设置不同尺寸设备的LaunchImage，来使得App适配这些设备，项目中其他地方使用的图片，只能设置为@1x、@2x、@3x，并且这些图都是成比例的。要是在不同不同尺寸设备上使用不同大小的图片，则需要在代码中一一判断，然后加载。</p>
+
+<!--more-->
+
+
+<p>现有一个案例是，App第一次启动的时候需要加载引导页，引导页一般都是全屏的图片，这个时候对于不同尺寸的设备来说，就需要不同大小的引导图片了。方法肯定是通过判断设备尺寸来选择加载哪种大小的图片，在<a href="http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image">StackOverFlow</a>上看到利用扩展UIImage来实现该效果，有方便也有不方便之处：</p>
+
+<ul>
+<li>方便之处在于只要添加该UIImage类别，代码中使用类别中的类方法即可</li>
+<li>不方便之处在于，对于图片以及命名来说，有严格要求。图片格式必须要是PNG格式的；图片命名必须按照指定规则</li>
+</ul>
+
+
+<p>当然，总体来说，代码量少了，图片的限制都是一些机械操作，实际上还是方便许多的。下面具体来学学如何根据设备不同选择不同尺寸的图片。</p>
+
+<h2>1 封装UIImage类别</h2>
+
+<p>代码可以在<a href="https://github.com/victorjiang/UIImage-VJDeviceSpecificMedia/">GitHub</a>上下载。</p>
+
+<h3>1.1 设备类型枚举<code>VJDeviceClass</code></h3>
+
+<p>首先看<code>VJDeviceClass</code>这个枚举，根据设备尺寸不同分为以下几种类型：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// VJDeviceClass enum
+</span><span class='line'>typedef NS_ENUM(NSInteger, VJDeviceClass) {
+</span><span class='line'>    // iPhone
+</span><span class='line'>    VJDeviceClass_iPhone,
+</span><span class='line'>    VJDeviceClass_iPhoneRetina,
+</span><span class='line'>    VJDeviceClass_iPhone5,
+</span><span class='line'>    VJDeviceClass_iPhone6,
+</span><span class='line'>    VJDeviceClass_iPhone6plus,
+</span><span class='line'>    
+</span><span class='line'>    // iPad
+</span><span class='line'>    VJDeviceClass_iPad,
+</span><span class='line'>    VJDeviceClass_iPadRetina,
+</span><span class='line'>    
+</span><span class='line'>    // unKnown
+</span><span class='line'>    VJDeviceClass_unKnown
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设备类型包括iPhone、iPad、以及unKnown，这里发现根据尺寸不同这种说法其实是错误的，严格来说应该是分辨率不同，比如iPhone4&amp;iPhone4S，其实他们俩尺寸是一样的，但是他们的分辨率不同，iPhone4是<code>VJDeviceClass_iPhone</code>类型，而iPhone4S是<code>VJDeviceClass_iPhoneRetina</code>类型。习惯了说尺寸，在这里解释以下，应该不影响大家的理解。</p>
+
+<h3>1.2 获取当前设备类型</h3>
+
+<p>定义一个函数来获取当前设备的类型：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>VJDeviceClass VJ_CurrentDeviceClass()
+</span><span class='line'>{
+</span><span class='line'>    CGFloat greaterPixelDimension = fmaxf([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width);
+</span><span class='line'>    
+</span><span class='line'>    switch ((NSInteger)greaterPixelDimension) {
+</span><span class='line'>        case 480:
+</span><span class='line'>            return ([[UIScreen mainScreen] scale] &gt; 1.0) ? VJDeviceClass_iPhoneRetina : VJDeviceClass_iPhone;
+</span><span class='line'>            break;
+</span><span class='line'>        case 568:
+</span><span class='line'>            return VJDeviceClass_iPhone5;
+</span><span class='line'>            break;
+</span><span class='line'>        case 667:
+</span><span class='line'>            return VJDeviceClass_iPhone6;
+</span><span class='line'>            break;
+</span><span class='line'>        case 736:
+</span><span class='line'>            return VJDeviceClass_iPhone6plus;
+</span><span class='line'>            break;
+</span><span class='line'>        case 1024:
+</span><span class='line'>            return ([[UIScreen mainScreen] scale] &gt; 1.0) ? VJDeviceClass_iPadRetina : VJDeviceClass_iPad;
+</span><span class='line'>            break;
+</span><span class='line'>        default:
+</span><span class='line'>            return VJDeviceClass_unKnown;
+</span><span class='line'>            break;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过获取设备屏幕的尺寸来判断设备的类型，注意，这里就涉及到上面说的iPhone4&amp;iPhone4S的问题，还需要再根据<code>scale</code>属性来进一步判断，iPad也同样存在这个问题。</p>
+
+<h3>1.3 获取图片对象</h3>
+
+<p>给UIImage的类别添加两个类方法，模仿<code>imageNamed:</code>方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// imageName without suffix, image's type default is PNG
+</span><span class='line'>+ (instancetype)imageForDeviceWithName:(NSString *)imageName
+</span><span class='line'>{
+</span><span class='line'>    return [UIImage imageForDeviceWithName:imageName type:@"png"];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// specify the image's type
+</span><span class='line'>+ (instancetype)imageForDeviceWithName:(NSString *)imageName type:(NSString *)type
+</span><span class='line'>{
+</span><span class='line'>    NSString *suffixString;
+</span><span class='line'>    switch (VJ_CurrentDeviceClass()) {
+</span><span class='line'>        case VJDeviceClass_iPhone:
+</span><span class='line'>            suffixString = @"";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPhoneRetina:
+</span><span class='line'>            suffixString = @"@2x";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPhone5:
+</span><span class='line'>            suffixString = @"-568h@2x";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPhone6:
+</span><span class='line'>            suffixString = @"-667h@2x";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPhone6plus:
+</span><span class='line'>            suffixString = @"-736h@3x";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPad:
+</span><span class='line'>            suffixString = @"~ipad";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_iPadRetina:
+</span><span class='line'>            suffixString = @"~ipad@2x";
+</span><span class='line'>            break;
+</span><span class='line'>        case VJDeviceClass_unKnown:
+</span><span class='line'>        default:
+</span><span class='line'>            suffixString = @"";
+</span><span class='line'>            break;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    UIImage *image = nil;
+</span><span class='line'>    NSString *imageFullName = [imageName stringByAppendingString:suffixString];
+</span><span class='line'>    
+</span><span class='line'>    // if type is not png, imageFullName & imageName will append the suffix of type
+</span><span class='line'>    if (![[type lowercaseString] isEqualToString:@"png"]) {
+</span><span class='line'>        imageFullName = [[imageFullName stringByAppendingString:@"."] stringByAppendingString:type];
+</span><span class='line'>        imageName = [[imageName stringByAppendingString:@"."] stringByAppendingString:type];
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    image = [UIImage imageNamed:imageFullName];
+</span><span class='line'>    
+</span><span class='line'>    if (!image) {
+</span><span class='line'>        image = [UIImage imageNamed:imageName];
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    return image;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考的<a href="http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image">StackOverFlow</a>其实只给了第一个方法，而且方法里并没有判断图片类型，这就存在一个问题，说这个问题之前先说一个需要注意的地方：</p>
+
+<ul>
+<li>注：<code>imageName</code>这个参数是不带图片扩展的图片名，如图片<code>image.png</code>，<code>imageName</code>的值应该是<code>image</code>，而不是<code>image.png</code>，看上面方法的实现，其实是在<code>imageName</code>后面拼接字符，所以如果<code>imageName</code>参数带图片扩展的话，最终图片名就不对了。</li>
+</ul>
+
+
+<p>下面再来说这个问题，<a href="http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image">StackOverFlow</a>上的代码其实要求图片必须是PNG格式的。UIImage的类方法<code>imageNamed:</code>参数如果是不带扩展的图片名，则默认加载的是PNG格式的图片，如果图片格式为JPEG，获取到的UIImage为nil，加载不出来图片。</p>
+
+<p>所以我在原作者的基础上修改了这个方法，并又增加了一个方法，可以指定图片扩展。<code>imageForDeviceWithName:</code>方法默认加载PNG格式的图片。</p>
+
+<h2>2 修改图片名称</h2>
+
+<p>根据代码可以看出，不同尺寸设备，其实是加载不同的图片，通过给imageName后拼接不同的后缀实现。</p>
+
+<ul>
+<li>iPhoneRetina  &mdash;&ndash;>        &ldquo;@2x&rdquo;           &mdash;&ndash;>    960 × 640</li>
+<li>iPhone5           &mdash;&ndash;>        &ldquo;-568h@2x&rdquo;  &mdash;&ndash;>    1136 × 640</li>
+<li>iPhone6           &mdash;&ndash;>        &ldquo;-667h@2x&rdquo;  &mdash;&ndash;>    1334 × 750</li>
+<li>iPhone6plus       &mdash;&ndash;>        &ldquo;-736h@3x&rdquo;      &mdash;&ndash;>    2208 × 1242</li>
+<li>iPad              &mdash;&ndash;>        &ldquo;~ipad&rdquo;     &mdash;&ndash;>    1024 × 768</li>
+<li>iPadRetina        &mdash;&ndash;>        &ldquo;~ipad@2x&rdquo;      &mdash;&ndash;>    2048 × 1536</li>
+</ul>
+
+
+<p>iPhone和unKnown类型不用拼接后缀。</p>
+
+<p>修改图片名称，我是用的Automator的Service，通过添加Service能够快速的设置，还可以批量设置。</p>
+
+<!--添加图片1-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2015/uiimage_device_1.png" alt="apns_prac_1" /></p>
+
+<p>打开Automator，选择Service</p>
+
+<!--添加图片2-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2015/uiimage_device_2.png" alt="apns_prac_1" /></p>
+
+<ol>
+<li>选择<strong>Files&amp;Folders</strong></li>
+<li>双击<strong>Rename Finder Items</strong></li>
+<li>添加</li>
+</ol>
+
+
+<p>接下来就是设置该Service了，如图：</p>
+
+<!--添加图片3-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2015/uiimage_device_3.png" alt="apns_prac_1" /></p>
+
+<ol>
+<li>选择Finder中的图片文件</li>
+<li>选择添加文本</li>
+<li>输入要添加的字符，以及设置字符添加的位置，这里设置在原文件名后面添加</li>
+<li>保存为<code>-568h@2x</code>（Command + s）</li>
+</ol>
+
+
+<p>这样就完成了一个Service的添加，接下来就可以快速修改图片名称了，在Finder中找到要修改的图，选中右击，在选项框中选择Services，就会出现刚刚添加的Service<code>-568h@2x</code>。</p>
+
+<!--添加图片4-->
+
+
+<p style="text-align:center;"><img src="http://victorjiang.github.io/images/2015/uiimage_device_4.png" alt="apns_prac_1" /></p>
+
+<p>类似，可以添加其他Services，如图中的<code>-736h@3x</code>、<code>~ipad@2x</code>等等，其实还可以添加一些别的Services，如图中本人添加的<code>Compress_50%</code>，美工给的图基本是高清的，需要自己压缩一下；还有<code>Compress_120*120</code>，用于设置Icon；以及<code>png</code>、<code>jpg</code>，将图片转换成对应的类型。需要什么样的Service都可以去Automator中添加，用起来还是很方便的。</p>
+
+<h2>3 添加图片到工程中</h2>
+
+<p>需要注意的是，不能将这些图添加到<code>Images.xcassets</code>中，只能添加在工程的目录结构中，原因是添加到<code>Images.xcassets</code>中的图片，如果图片名中存在<code>@2x</code>、<code>@3x</code>，则这些图会被处理，图片名删掉<code>@2x</code>、<code>@3x</code>，并且把图片放在相应的位置上。</p>
+
+<h2>总结</h2>
+
+<p>总的来说，通过给UIImage添加扩展的方法来选择不同尺寸设备的图片还是挺方面的，虽然说有许多限制，但最终还是能实现该效果。</p>
+
+<h2>参考</h2>
+
+<p><a href="http://stackoverflow.com/questions/26703083/asset-catalog-images-of-type-retina-4-2x-not-presented-on-iphone-6">http://stackoverflow.com/questions/26703083/asset-catalog-images-of-type-retina-4-2x-not-presented-on-iphone-6</a></p>
+
+<p><a href="http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image">http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2015年规划及目标]]></title>

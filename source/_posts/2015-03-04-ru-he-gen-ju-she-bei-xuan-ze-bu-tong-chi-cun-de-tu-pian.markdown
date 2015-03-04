@@ -84,13 +84,13 @@ VJDeviceClass VJ_CurrentDeviceClass()
 
 ```
 // imageName without suffix, image's type default is PNG
-+ (instancetype)imageForDeviceWithName:(NSString *)imageName
++ (instancetype)vj_imageForDeviceWithName:(NSString *)imageName
 {
-    return [UIImage imageForDeviceWithName:imageName type:@"png"];
+    return [UIImage vj_imageForDeviceWithName:imageName type:@"png"];
 }
 
 // specify the image's type
-+ (instancetype)imageForDeviceWithName:(NSString *)imageName type:(NSString *)type
++ (instancetype)vj_imageForDeviceWithName:(NSString *)imageName type:(NSString *)type
 {
     NSString *suffixString;
     switch (VJ_CurrentDeviceClass()) {
@@ -145,7 +145,7 @@ VJDeviceClass VJ_CurrentDeviceClass()
 
 下面再来说这个问题，[StackOverFlow](http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image)上的代码其实要求图片必须是PNG格式的。UIImage的类方法`imageNamed:`参数如果是不带扩展的图片名，则默认加载的是PNG格式的图片，如果图片格式为JPEG，获取到的UIImage为nil，加载不出来图片。
 
-所以我在原作者的基础上修改了这个方法，并又增加了一个方法，可以指定图片扩展。`imageForDeviceWithName:`方法默认加载PNG格式的图片。
+所以我在原作者的基础上修改了这个方法，并又增加了一个方法，可以指定图片扩展。`vj_imageForDeviceWithName:`方法默认加载PNG格式的图片。
 
 ##2 修改图片名称
 

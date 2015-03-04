@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | Victor Jiang's Blog]]></title>
   <link href="http://victorjiang.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://victorjiang.github.io/"/>
-  <updated>2015-03-04T00:06:30+08:00</updated>
+  <updated>2015-03-04T21:36:40+08:00</updated>
   <id>http://victorjiang.github.io/</id>
   <author>
     <name><![CDATA[Victor Jiang]]></name>
@@ -106,16 +106,16 @@ switch ((NSInteger)greaterPixelDimension) {
 
 <p>```
 // imageName without suffix, image&rsquo;s type default is PNG
-+ (instancetype)imageForDeviceWithName:(NSString *)imageName
++ (instancetype)vj_imageForDeviceWithName:(NSString *)imageName
 {</p>
 
-<pre><code>return [UIImage imageForDeviceWithName:imageName type:@"png"];
+<pre><code>return [UIImage vj_imageForDeviceWithName:imageName type:@"png"];
 </code></pre>
 
 <p>}</p>
 
 <p>// specify the image&rsquo;s type
-+ (instancetype)imageForDeviceWithName:(NSString <em>)imageName type:(NSString </em>)type
++ (instancetype)vj_imageForDeviceWithName:(NSString <em>)imageName type:(NSString </em>)type
 {</p>
 
 <pre><code>NSString *suffixString;
@@ -176,7 +176,7 @@ return image;
 
 <p>下面再来说这个问题，<a href="http://stackoverflow.com/questions/25892207/how-to-specify-size-for-iphone-6-customised-edge-to-edge-image">StackOverFlow</a>上的代码其实要求图片必须是PNG格式的。UIImage的类方法<code>imageNamed:</code>参数如果是不带扩展的图片名，则默认加载的是PNG格式的图片，如果图片格式为JPEG，获取到的UIImage为nil，加载不出来图片。</p>
 
-<p>所以我在原作者的基础上修改了这个方法，并又增加了一个方法，可以指定图片扩展。<code>imageForDeviceWithName:</code>方法默认加载PNG格式的图片。</p>
+<p>所以我在原作者的基础上修改了这个方法，并又增加了一个方法，可以指定图片扩展。<code>vj_imageForDeviceWithName:</code>方法默认加载PNG格式的图片。</p>
 
 <h2>2 修改图片名称</h2>
 

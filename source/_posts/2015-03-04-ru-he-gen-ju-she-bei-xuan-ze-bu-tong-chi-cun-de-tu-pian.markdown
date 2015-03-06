@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, VJDeviceClass) {
     VJDeviceClass_unKnown
 };
 ```
-设备类型包括iPhone、iPad、以及unKnown，这里发现根据尺寸不同这种说法其实是错误的，严格来说应该是分辨率不同，比如iPhone4&iPhone4S，其实他们俩尺寸是一样的，但是他们的分辨率不同，iPhone4是`VJDeviceClass_iPhone`类型，而iPhone4S是`VJDeviceClass_iPhoneRetina`类型。习惯了说尺寸，在这里解释以下，应该不影响大家的理解。
+设备类型包括iPhone、iPad、以及unKnown，这里发现根据尺寸不同这种说法其实是错误的，严格来说应该是分辨率不同，比如iPhone3GS之前的机型和iPhone4，其实他们尺寸是一样的，但是他们的分辨率不同，iPhone3GS之前的机型是`VJDeviceClass_iPhone`类型，而iPhone4是`VJDeviceClass_iPhoneRetina`类型。习惯了说尺寸，在这里解释以下，应该不影响大家的理解。
 
 ###1.2 获取当前设备类型
 
@@ -76,7 +76,7 @@ VJDeviceClass VJ_CurrentDeviceClass()
     }
 }
 ```
-通过获取设备屏幕的尺寸来判断设备的类型，注意，这里就涉及到上面说的iPhone4&iPhone4S的问题，还需要再根据`scale`属性来进一步判断，iPad也同样存在这个问题。
+通过获取设备屏幕的尺寸来判断设备的类型，注意，这里就涉及到上面说的iPhone3GS&iPhone4的问题，还需要再根据`scale`属性来进一步判断，iPad也同样存在这个问题。
 
 ###1.3 获取图片对象
 
